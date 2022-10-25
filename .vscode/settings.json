@@ -1,0 +1,11 @@
+{
+  "workbench.colorCustomizations": {
+    "editorUnnecessaryCode.border": "#00FF00",
+    "editorRuler.foreground": "#292929"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.rulers": [80],
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "files.trimTrailingWhitespace": true
+}

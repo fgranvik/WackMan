@@ -1,0 +1,10 @@
+body {
+  background-color: #000;
+}
+
+canvas {
+  border: 1px solid #666;
+  background-color: #222;
+  font-smooth: antialiased;
+  -webkit-font-smoothing: antialiased;
+}

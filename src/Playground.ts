@@ -32,7 +32,7 @@ eee101eeeeeee101eee
 // 1 = Wall
 // 2 = pathway
 
-const gameMap = [
+export const gameMap: number[][] = [
   [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
   [1, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 1],
   [1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 2, 1],
@@ -58,20 +58,28 @@ const gameMap = [
 
 class Playground {
   canvas: HTMLCanvasElement
+  playerCanvas: HTMLCanvasElement
   context: CanvasRenderingContext2D
-  applePosition: Position
+  playerContext: CanvasRenderingContext2D
 
   constructor() {
-    this.applePosition = { X: 0, Y: 0 }
+    this.canvas = document.createElement('canvas') as HTMLCanvasElement
+    this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
+    this.playerCanvas = document.createElement('canvas') as HTMLCanvasElement
+    this.playerContext = this.playerCanvas.getContext(
+      '2d'
+    ) as CanvasRenderingContext2D
     this.init()
   }
 
   createCanvas = (): void => {
-    this.canvas = document.createElement('canvas') as HTMLCanvasElement
-    this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D
-    this.canvas.width = DefaultSettings.WIDTH
-    this.canvas.height = DefaultSettings.HEIGHT
-    document.body.append(this.canvas)
+    this.canvas.width = this.playerCanvas.width = DefaultSettings.WIDTH
+    this.canvas.height = this.playerCanvas.height = DefaultSettings.HEIGHT
+    this.canvas.id = 'playground'
+    this.playerCanvas.id = 'player'
+    const gameArea = document.querySelector('#gameArea')
+    gameArea?.appendChild(this.canvas)
+    gameArea?.appendChild(this.playerCanvas)
   }
 
   drawBlock = (color: string, x: number, y: number): void => {
@@ -103,8 +111,37 @@ class Playground {
             break
           case 1:
             {
-              const color = '#009'
-              this.drawBlock(color, x, y)
+              const color = 'blue'
+
+              // this.drawBlock(color, x, y)
+              this.context.fillStyle = 'rgb(0, 0, 100)'
+              this.context.fillRect(
+                x * DefaultSettings.BLOCK_SIZE,
+                y * DefaultSettings.BLOCK_SIZE,
+                DefaultSettings.BLOCK_SIZE,
+                DefaultSettings.BLOCK_SIZE
+              )
+              this.context.beginPath()
+              this.context.moveTo(
+                x * DefaultSettings.BLOCK_SIZE,
+                y * DefaultSettings.BLOCK_SIZE + DefaultSettings.BLOCK_SIZE / 3
+              )
+              this.context.lineTo(
+                x * DefaultSettings.BLOCK_SIZE + DefaultSettings.BLOCK_SIZE,
+                y * DefaultSettings.BLOCK_SIZE + DefaultSettings.BLOCK_SIZE / 3
+              )
+              this.context.moveTo(
+                x * DefaultSettings.BLOCK_SIZE,
+                y * DefaultSettings.BLOCK_SIZE +
+                  DefaultSettings.BLOCK_SIZE * 0.67
+              )
+              this.context.lineTo(
+                x * DefaultSettings.BLOCK_SIZE + DefaultSettings.BLOCK_SIZE,
+                y * DefaultSettings.BLOCK_SIZE +
+                  DefaultSettings.BLOCK_SIZE * 0.67
+              )
+              this.context.strokeStyle = color
+              this.context.stroke()
             }
             break
           case 2:
@@ -136,7 +173,6 @@ class Playground {
   }
 
   init = (): void => {
-    console.log('playground init')
     this.createCanvas()
     this.drawPlayground()
   }

@@ -2,9 +2,25 @@ body {
   background-color: #000;
 }
 
-canvas {
-  border: 1px solid #666;
+#debug {
+  background-color: #fff;
+  width: 240px;
+  height: 380px;
+  display: block;
+  position: fixed;
+  right: 20px;
+  top: 20px;
+}
+#gameArea {
   background-color: #222;
+  border: 1px solid #666;
+  display: inline-flex;
+  width: 608px;
+  height: 672px;
+}
+
+#gameArea canvas {
+  position: absolute;
   font-smooth: antialiased;
   -webkit-font-smoothing: antialiased;
 }

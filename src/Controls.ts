@@ -11,14 +11,13 @@ class Controls {
   }
 
   init = (): void => {
-    console.log('init controls')
     document.addEventListener('keydown', (e: KeyboardEvent) => {
       this.keyPressed = e.code
-      console.log('key pressed', this.keyPressed)
+      // console.info('Key pressed: ', this.keyPressed)
 
       switch (this.keyPressed) {
         case 'KeyM':
-          console.log('pressed M')
+          console.log('Toggle music')
           break
         case 'Space':
           console.log('pressed Space')
@@ -26,25 +25,20 @@ class Controls {
           break
         // Game direction
         case 'ArrowDown':
-          debugger
-
-          if (this.Game.player.previousDirection == Direction.Up) return
           this.Game.player.direction = Direction.Down
+          this.Game.player.move()
           break
         case 'ArrowUp':
-          debugger
-          if (this.Game.player.previousDirection == Direction.Down) return
           this.Game.player.direction = Direction.Up
+          this.Game.player.move()
           break
         case 'ArrowLeft':
-          debugger
-          if (this.Game.player.previousDirection == Direction.Right) return
           this.Game.player.direction = Direction.Left
+          this.Game.player.move()
           break
         case 'ArrowRight':
-          debugger
-          if (this.Game.player.previousDirection == Direction.Left) return
           this.Game.player.direction = Direction.Right
+          this.Game.player.move()
           break
       }
     })

@@ -5,9 +5,7 @@ class Gui {
     this.init()
   }
 
-  init = (): void => {
-    debugger
-  }
+  init = (): void => {}
 }
 
 export default Gui

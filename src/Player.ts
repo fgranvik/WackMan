@@ -5,7 +5,7 @@ import { Direction, Position } from './type'
 
 class Player {
   Game: Game
-  direction?: Direction
+  direction: Direction
   previousDirection?: Direction
   position: Position
   context: CanvasRenderingContext2D
@@ -13,24 +13,27 @@ class Player {
   mouth_y: number
   comparePosition: Position
   actualPosition: Position
+  nextBlock: number
 
   constructor(game: Game) {
     this.Game = game
     this.context = this.Game.playground.playerContext
+    this.direction = Direction.Right
     this.position = {
-      X: 10,
-      Y: 16
+      X: 9,
+      Y: 15
     }
     this.comparePosition = {
-      X: 10,
-      Y: 16
+      X: 9,
+      Y: 15
     }
     this.actualPosition = {
-      X: 10 * DefaultSettings.BLOCK_SIZE,
-      Y: 16 * DefaultSettings.BLOCK_SIZE
+      X: 9 * DefaultSettings.BLOCK_SIZE,
+      Y: 15 * DefaultSettings.BLOCK_SIZE
     }
     this.mouth_x = 0
     this.mouth_y = 0
+    this.nextBlock = 0
 
     this.init()
   }
@@ -71,16 +74,16 @@ class Player {
     try {
       this.context.beginPath()
       this.context.arc(
-        X - DefaultSettings.BLOCK_SIZE / 2,
-        Y - DefaultSettings.BLOCK_SIZE / 2,
+        X + DefaultSettings.BLOCK_SIZE / 2,
+        Y + DefaultSettings.BLOCK_SIZE / 2,
         DefaultSettings.BLOCK_SIZE / 2,
         this.mouth_x * Math.PI,
         this.mouth_y * Math.PI,
         false
       )
       this.context.lineTo(
-        X - DefaultSettings.BLOCK_SIZE / 2,
-        Y - DefaultSettings.BLOCK_SIZE / 2
+        X + DefaultSettings.BLOCK_SIZE / 2,
+        Y + DefaultSettings.BLOCK_SIZE / 2
       )
 
       this.context.closePath()
@@ -96,7 +99,7 @@ class Player {
       case Direction.Left:
         if (
           this.actualPosition.X >
-          this.actualPosition.X + DefaultSettings.BLOCK_SIZE
+          this.comparePosition.X * DefaultSettings.BLOCK_SIZE
         ) {
           this.actualPosition.X -= 2
         }
@@ -104,7 +107,7 @@ class Player {
       case Direction.Right:
         if (
           this.actualPosition.X <
-          this.position.X * DefaultSettings.BLOCK_SIZE
+          this.comparePosition.X * DefaultSettings.BLOCK_SIZE
         ) {
           this.actualPosition.X += 2
         }
@@ -112,7 +115,7 @@ class Player {
       case Direction.Up:
         if (
           this.actualPosition.Y >
-          this.position.X * DefaultSettings.BLOCK_SIZE
+          this.comparePosition.X * DefaultSettings.BLOCK_SIZE
         ) {
           this.actualPosition.Y -= 2
         }
@@ -120,7 +123,7 @@ class Player {
       case Direction.Down:
         if (
           this.actualPosition.Y <
-          this.position.Y * DefaultSettings.BLOCK_SIZE
+          this.comparePosition.Y * DefaultSettings.BLOCK_SIZE
         ) {
           this.actualPosition.Y += 2
         }
@@ -131,37 +134,61 @@ class Player {
   }
 
   validatePosition = (): boolean => {
-    const point = gameMap[this.comparePosition.Y][this.comparePosition.X]
-    return point != 1 ? true : false
+    this.nextBlock = gameMap[this.comparePosition.Y][this.comparePosition.X]
+    console.log('next', this.nextBlock)
+    return this.nextBlock == 1 ? false : true
   }
 
   move = (): void => {
+    let valid = false
+
+    // Validate next position
     switch (this.direction) {
-      case Direction.Down:
-        this.position.Y += 1
-        this.comparePosition.X = this.position.X - 1
-        this.comparePosition.Y = this.position.Y
+      case Direction.Down: {
+        this.comparePosition.Y += 1
+        if (this.validatePosition()) {
+          this.position.Y += 1
+          this.animateMovement()
+        } else {
+          this.comparePosition.Y -= 1
+        }
         break
-      case Direction.Up:
-        this.position.Y -= 1
-        this.comparePosition.Y = this.position.Y - 2
-        this.comparePosition.X = this.position.X - 1
+      }
+      case Direction.Up: {
+        this.comparePosition.Y -= 1
+        if (this.validatePosition()) {
+          this.position.Y -= 1
+          this.animateMovement()
+        } else {
+          this.comparePosition.Y += 1
+        }
         break
-      case Direction.Right:
-        this.position.X += 1
-        this.comparePosition.Y = this.position.Y - 1
-        this.comparePosition.X = this.position.X
+      }
+      case Direction.Right: {
+        this.comparePosition.X += 1
+        if (this.validatePosition()) {
+          this.position.X += 1
+          this.animateMovement()
+        } else {
+          this.comparePosition.X -= 1
+        }
         break
-      case Direction.Left:
-        this.position.X -= 1
-        this.comparePosition.Y = this.position.Y - 1
-        this.comparePosition.X = this.position.X - 2
+      }
+      case Direction.Left: {
+        this.comparePosition.X -= 1
+        if (this.validatePosition()) {
+          this.position.X -= 1
+          this.animateMovement()
+        } else {
+          this.comparePosition.X += 1
+        }
         break
+      }
     }
 
-    if (this.validatePosition()) {
-      this.animateMovement()
-    }
+    // if (false) {
+    //   this.animateMovement()
+    // }
   }
 
   init = (): void => {
@@ -169,6 +196,7 @@ class Player {
       this.position.X * DefaultSettings.BLOCK_SIZE,
       this.position.Y * DefaultSettings.BLOCK_SIZE
     )
+    // this.drawPlayer(0, 0)
   }
 }
 

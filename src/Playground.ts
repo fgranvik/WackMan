@@ -154,7 +154,7 @@ class Playground {
                     DefaultSettings.BLOCK_SIZE / 2,
                   y * DefaultSettings.BLOCK_SIZE +
                     DefaultSettings.BLOCK_SIZE / 2,
-                  2,
+                  3,
                   0,
                   2 * Math.PI
                 )

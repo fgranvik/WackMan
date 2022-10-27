@@ -7,6 +7,7 @@ import AudioPlayer from './AudioPlayer'
 import Controls from './Controls'
 import { DefaultSettings } from './Settings'
 import { Direction } from './type'
+import { compareObjects } from './Utils'
 
 class Game {
   playground: Playground
@@ -37,9 +38,11 @@ class Game {
       '<br>',
       `X: ${this.player.position.X}, Y: ${this.player.position.Y}`,
       '<br>',
-      `(X): ${this.player.comparePosition.X}, (Y): ${this.player.comparePosition.Y}`,
+      `(CX): ${this.player.comparePosition.X}, (CY): ${this.player.comparePosition.Y}`,
       '<br>',
       `(AX): ${this.player.actualPosition.X}, (AY): ${this.player.actualPosition.Y}`,
+      '<br>',
+      `is ok? , nextBlock: ${this.player.nextBlock}`,
       '<br>',
       `Direction: ${this.player.direction}`,
       '<br>',
@@ -53,8 +56,10 @@ class Game {
   gameLoop = (timer: number): void => {
     const verifyTimer = Date.now()
     const diff = verifyTimer - timer
+    console.log('gameLoop is running')
 
     this.debug()
+
     if (this.isRunning) {
       if (diff >= DefaultSettings.GAMELOOP) {
         this.player.move()
@@ -71,7 +76,6 @@ class Game {
 
   init = (): void => {
     this.gameLoop(this.timer)
-    this.playground.drawPlayground()
   }
 }
 

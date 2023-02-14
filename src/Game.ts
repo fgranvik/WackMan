@@ -54,18 +54,17 @@ class Game {
   }
 
   gameLoop = (timer: number): void => {
-    const verifyTimer = Date.now()
-    const diff = verifyTimer - timer
-    console.log('gameLoop is running')
-
-    this.debug()
-
     if (this.isRunning) {
+      const verifyTimer = Date.now()
+      const diff = verifyTimer - timer
+      console.log('gameLoop is running')
+
+      this.debug()
+
       if (diff >= DefaultSettings.GAMELOOP) {
         this.player.move()
         timer = Date.now()
       }
-    } else {
     }
     requestAnimationFrame(this.gameLoop)
   }

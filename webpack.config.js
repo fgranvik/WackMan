@@ -3,7 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const path = require('path')
 
 module.exports = {
-  watch: true,
+  watch: process.env == 'production' ? false : true,
   mode: 'development',
   entry: './src/Game.ts',
   module: {

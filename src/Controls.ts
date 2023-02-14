@@ -26,19 +26,15 @@ class Controls {
         // Game direction
         case 'ArrowDown':
           this.Game.player.direction = Direction.Down
-          this.Game.player.move()
           break
         case 'ArrowUp':
           this.Game.player.direction = Direction.Up
-          this.Game.player.move()
           break
         case 'ArrowLeft':
           this.Game.player.direction = Direction.Left
-          this.Game.player.move()
           break
         case 'ArrowRight':
           this.Game.player.direction = Direction.Right
-          this.Game.player.move()
           break
       }
     })

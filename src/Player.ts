@@ -20,16 +20,16 @@ class Player {
     this.context = this.Game.playground.playerContext
     this.direction = Direction.Right
     this.position = {
-      X: 9,
-      Y: 15
+      X: 4,
+      Y: 9
     }
     this.comparePosition = {
-      X: 9,
-      Y: 15
+      X: 0,
+      Y: 0
     }
     this.actualPosition = {
-      X: 9 * DefaultSettings.BLOCK_SIZE,
-      Y: 15 * DefaultSettings.BLOCK_SIZE
+      X: this.position.X * DefaultSettings.BLOCK_SIZE,
+      Y: this.position.Y * DefaultSettings.BLOCK_SIZE
     }
     this.mouth_x = 0
     this.mouth_y = 0
@@ -70,6 +70,7 @@ class Player {
   drawPlayer = (X: number, Y: number): void => {
     this.clearCanvas()
     this.positionMouth()
+    // this.drawCompare(this.comparePosition.X, this.comparePosition.Y)
 
     try {
       this.context.beginPath()
@@ -94,6 +95,20 @@ class Player {
     }
   }
 
+  drawCompare = (X: number, Y: number): void => {
+    this.context.beginPath()
+    this.context.lineWidth = 1
+
+    this.context.strokeStyle = 'red'
+    this.context.rect(
+      X * DefaultSettings.BLOCK_SIZE,
+      Y * DefaultSettings.BLOCK_SIZE,
+      DefaultSettings.BLOCK_SIZE,
+      DefaultSettings.BLOCK_SIZE
+    )
+    this.context.stroke()
+  }
+
   animateMovement = (): void => {
     switch (this.direction) {
       case Direction.Left:
@@ -115,7 +130,7 @@ class Player {
       case Direction.Up:
         if (
           this.actualPosition.Y >
-          this.comparePosition.X * DefaultSettings.BLOCK_SIZE
+          this.comparePosition.Y * DefaultSettings.BLOCK_SIZE
         ) {
           this.actualPosition.Y -= 2
         }
@@ -141,11 +156,13 @@ class Player {
 
   move = (): void => {
     let valid = false
+    this.comparePosition = Object.assign({}, this.position)
 
     // Validate next position
     switch (this.direction) {
       case Direction.Down: {
         this.comparePosition.Y += 1
+
         if (this.validatePosition()) {
           this.position.Y += 1
           this.animateMovement()
@@ -177,7 +194,13 @@ class Player {
       case Direction.Left: {
         this.comparePosition.X -= 1
         if (this.validatePosition()) {
-          this.position.X -= 1
+          if (this.comparePosition.X <= -1) {
+            this.position.X = 19
+            debugger
+            // DefaultSettings.WIDTH / DefaultSettings.BLOCK_SIZE - 1
+          } else {
+            this.position.X -= 1
+          }
           this.animateMovement()
         } else {
           this.comparePosition.X += 1

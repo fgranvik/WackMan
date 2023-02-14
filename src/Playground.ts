@@ -1,5 +1,4 @@
 import { DefaultSettings } from './Settings'
-import { Position } from './type'
 
 /*
 Default map
